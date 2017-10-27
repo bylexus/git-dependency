@@ -1,0 +1,72 @@
+{
+  "name": "git-dependency",
+  "version": "0.0.1",
+  "description": "Install / clones git repositories as dependencies defined in package.json.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bylexus/git-dependency.git"
+  },
+  "author": "Alexander Schenkel",
+  "email": "alex@alexi.ch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bylexus/git-dependency/issues"
+  },
+  "homepage": "https://github.com/bylexus/git-dependency#readme",
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "prettier": "^1.7.4"
+  },
+  "bin": {
+    "git-dependency": "bin/cmd.js"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": "prettier",
+    "env": {
+      "node": true
+    },
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "tabWidth": 4,
+          "printWidth": 120
+        }
+      ],
+      "no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "args": "none"
+        }
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "curly": "error",
+      "eqeqeq": "error",
+      "no-eval": "error",
+      "no-loop-func": "error",
+      "radix": "error",
+      "comma-dangle": "error",
+      "no-undef": "error"
+    }
+  },
+  "dependencies": {
+    "commander": "^2.11.0",
+    "jsonfile": "^4.0.0",
+    "rimraf": "^2.6.2"
+  }
+}
