@@ -24,7 +24,7 @@ var readPackageConfig = function() {
     return jsonfile.readFileSync(packageConfigPath());
 };
 
-program.version('0.0.1').option('-w, --working-dir <path>', 'use specified working directory');
+program.version('0.0.3').option('-w, --working-dir <path>', 'use specified working directory');
 
 program
     .command('install')

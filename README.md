@@ -45,9 +45,10 @@ To install / update repos configured in `package.json`, execute
 
 This installs the repos configured in `package.json` into `components` (or the configured base folder) by executing the follwing git commands:
 
-* `git clone` (if needed)
-* `git fetch --all`
+* `git clone` (for not installed repos)
+* or `git fetch --all` (for already installed repos)
 * `git checkout [ref]`
+* `git pull` (for branch refs)
 
 ### Remove installed repo
 
