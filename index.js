@@ -51,11 +51,23 @@ var installGitDependencies = function(config) {
 
         if (!fs.existsSync(fullOutdir)) {
             console.log('Cloning repository ' + url + ' to ' + outdir);
-            execSync(['git', 'clone', url, fullOutdir].join(' '));
+            execSync(['git', 'clone', '--origin=origin', url, fullOutdir].join(' '));
+        } else {
+            console.log('Fetching repository updates for ' + key);
+            execSync(['git', 'fetch', '--all'].join(' '), { cwd: fullOutdir });
         }
 
-        execSync(['git', 'fetch', '--all'].join(' '), { cwd: fullOutdir });
+        console.log('Checking out ref ' + key + ':' + version);
         execSync(['git', 'checkout', '-qf', version].join(' '), { cwd: fullOutdir });
+
+        // check if we have a branch. If this is the case, pull it.
+        try {
+            execSync(['git', 'show-ref', '--verify -q', 'refs/heads/' + version].join(' '), { cwd: fullOutdir });
+            console.log('Pulling branch ' + key + ':' + version);
+            execSync(['git', 'pull', '--force'].join(' '), { cwd: fullOutdir });
+        } catch (e) {
+            console.log(key + ':' + version + ': This does not seem to be a branch, skip pulling');
+        }
     }
 };
 
