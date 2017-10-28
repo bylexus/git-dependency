@@ -1,6 +1,6 @@
 {
   "name": "git-dependency",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Install / clones git repositories as dependencies defined in package.json.",
   "main": "index.js",
   "scripts": {
