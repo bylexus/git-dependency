@@ -51,7 +51,7 @@ var installGitDependencies = function(config) {
 
         if (!fs.existsSync(fullOutdir)) {
             console.log('Cloning repository ' + url + ' to ' + outdir);
-            execSync(['git', 'clone', '--origin=origin', url, fullOutdir].join(' '));
+            execSync(['git', 'clone', '--origin=origin', url, '"' + fullOutdir + '"'].join(' '));
         } else {
             console.log('Fetching repository updates for ' + key);
             execSync(['git', 'fetch', '--all'].join(' '), { cwd: fullOutdir });
