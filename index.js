@@ -1,7 +1,7 @@
 /**
  * git-dependency module
  *
- * (c) 2017 alex@alexi.ch
+ * (c) 2017-2019 alex@alexi.ch
  */
 var fs = require('fs'),
     path = require('path'),
@@ -18,6 +18,9 @@ var fs = require('fs'),
  *   gitDependencies: <base-dir for git checkouts>
  * },
  * gitDependencies: {
+ *   "options": {
+ *       "deleteDotGit": false
+ *   },
  *   [checkout-name]: "<git-url>#<ref>",
  *   ...
  * }
@@ -30,7 +33,14 @@ var installGitDependencies = function(config) {
     config = config || {};
     var path = require('path'),
         dir = config.directories ? config.directories.gitDependencies : 'components',
-        deps = config.gitDependencies || {};
+        deps = config.gitDependencies || {},
+        options = Object.assign(
+            {
+                deleteDotGit: false
+            },
+            deps.options || {}
+        );
+    delete deps.options;
 
     for (var key in deps) {
         var repo = deps[key];
@@ -47,14 +57,17 @@ var installGitDependencies = function(config) {
         }
         outdir = path.join(dir, key);
         var fullOutdir = path.join(process.cwd(), outdir);
+        var dotGitFolder = path.join(fullOutdir, '.git');
         console.log('git package ' + outdir + ': ' + url + '#' + version);
 
-        if (!fs.existsSync(fullOutdir)) {
-            console.log('Cloning repository ' + url + ' to ' + outdir);
-            execSync(['git', 'clone', '--origin=origin', url, '"' + fullOutdir + '"'].join(' '));
-        } else {
+        if (fs.existsSync(dotGitFolder)) {
             console.log('Fetching repository updates for ' + key);
             execSync(['git', 'fetch', '--all'].join(' '), { cwd: fullOutdir });
+        } else {
+            console.log('Removing old version in ' + outdir);
+            rimraf.sync(fullOutdir);
+            console.log('Cloning repository ' + url + ' to ' + outdir);
+            execSync(['git', 'clone', '--no-checkout', '--origin=origin', url, fullOutdir].join(' '));
         }
 
         console.log('Checking out ref ' + key + ':' + version);
@@ -67,6 +80,12 @@ var installGitDependencies = function(config) {
             execSync(['git', 'pull', '--force'].join(' '), { cwd: fullOutdir });
         } catch (e) {
             console.log(key + ':' + version + ': This does not seem to be a branch, skip pulling');
+        }
+
+        // removing .git folder, if deleteDotGit is set:
+        if (options.deleteDotGit === true) {
+            console.log('Removing .git folder in ' + fullOutdir);
+            rimraf.sync(dotGitFolder);
         }
     }
 };

@@ -73,6 +73,7 @@ You can change this location by adding a config to `package.json`:
 }
 ```
 
+
 ### Manually change repo entries in `package.json`
 
 The installed repos are stored in `package.json`. You can manually edit the entries, if needed. The structure looks as follows:
@@ -101,6 +102,24 @@ and then install them with
 
 `git-dependency install`
 
+### Options
+
+The `gitDependencies` key in `package.json` takes a special `options` object to configure some aspects of git-dependency:
 
 
-(c) 2017 alex@alexi.ch
+```json
+{
+    "gitDependencies": {
+        "options": {
+            "deleteDotGit": false
+        }
+    }
+}
+```
+
+#### `options.deleteDotGit`
+
+If `deleteDotGit` is set to true, the `.git` folder within the cloned repo dir is deleted, so that only the checked out files remain. This saves some megabytes of disk space if the repository is big.
+On the other side, the repo is newly checked out every time you execute `git-dependency install` again.
+
+(c) alex@alexi.ch
